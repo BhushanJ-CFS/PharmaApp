@@ -1,11 +1,16 @@
-const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
+// metro.config.js
+const { getDefaultConfig } = require('@react-native/metro-config');
+const { wrapWithReanimatedMetroConfig } = require('react-native-reanimated/metro-config');
 
-/**
- * Metro configuration
- * https://reactnative.dev/docs/metro
- *
- * @type {import('@react-native/metro-config').MetroConfig}
- */
-const config = {};
+const config = getDefaultConfig(__dirname);
 
-module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+// ✅ DO NOT manually add babelTransformerPath here
+// ✅ Reanimated’s wrapper handles this internally
+
+module.exports = wrapWithReanimatedMetroConfig({
+  ...config,
+  resolver: {
+    ...config.resolver,
+    assetExts: [...config.resolver.assetExts, 'txt', 'bin', 'ttf', 'otf'],
+  },
+});
